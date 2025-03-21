@@ -9,6 +9,8 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+    env_file:
+      - .env
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - DEBUG=True
@@ -24,6 +26,8 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
+    env_file:
+      - .env
     environment:
       - NODE_ENV=development
       - REACT_APP_API_URL=http://localhost:8000

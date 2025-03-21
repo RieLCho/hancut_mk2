@@ -10,7 +10,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class LLMService:
-    """GPT-4를 이용한 인테리어 프롬프트 생성 서비스"""
+    """GPT-3.5-turbo를 이용한 인테리어 프롬프트 생성 서비스"""
 
     @staticmethod
     async def generate_interior_prompt(text: str) -> str:
@@ -24,7 +24,7 @@ class LLMService:
             str: 생성된 인테리어 디자인 프롬프트
         """
         try:
-            # GPT-4 시스템 프롬프트
+            # GPT-3.5-turbo 시스템 프롬프트
             system_prompt = """
             당신은 인테리어 디자인 전문가입니다. 사용자의 요구사항에 따라 상세한 인테리어 디자인 프롬프트를 생성해주세요.
             다음 요소를 포함하세요:
@@ -44,7 +44,7 @@ class LLMService:
             
             # API 호출
             response = await openai.ChatCompletion.acreate(
-                model="gpt-4",
+                model="gpt-3.5-turbo",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": text}
