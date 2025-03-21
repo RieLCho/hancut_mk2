@@ -1,0 +1,44 @@
+# 백엔드
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.env.local
+env/
+venv/
+ENV/
+.venv
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 프론트엔드
+node_modules/
+/build
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# 기타
+*.log
+*.tmp
+*.temp 
