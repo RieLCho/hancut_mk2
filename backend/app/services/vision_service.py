@@ -72,13 +72,16 @@ class VisionService:
         if self._rcnn_model is None:
             print("Faster R-CNN 모델 로드 중...")
             try:
+                print("모델 초기화 중...")
+                self._rcnn_model = fasterrcnn_resnet50_fpn_v2(pretrained=False)
                 print("모델 가중치 다운로드 중...")
                 self._rcnn_weights = FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT
-                print("모델 초기화 중...")
-                self._rcnn_model = fasterrcnn_resnet50_fpn_v2(
-                    weights=self._rcnn_weights,
-                    cache_dir=self._cache_dir
+                state_dict = torch.hub.load_state_dict_from_url(
+                    self._rcnn_weights.url,
+                    map_location='cpu',
+                    progress=True
                 )
+                self._rcnn_model.load_state_dict(state_dict)
                 print("모델을 평가 모드로 설정 중...")
                 self._rcnn_model.eval()
                 print("Faster R-CNN 모델 로드 완료")
