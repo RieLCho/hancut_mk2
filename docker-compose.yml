@@ -16,6 +16,8 @@ services:
       - DEBUG=True
       - CORS_ORIGINS=http://localhost:3000
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - app-network
 
   frontend:
     build:
@@ -31,6 +33,7 @@ services:
     environment:
       - NODE_ENV=development
       - VITE_API_URL=http://localhost:8000
+      - CHOKIDAR_USEPOLLING=true # Docker에서 파일 변경 감지 개선
     depends_on:
       - backend
     networks:
