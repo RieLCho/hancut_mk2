@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent } from "react";
 import {
   Container,
   Typography,
@@ -9,36 +9,31 @@ import {
   Alert,
   Card,
   CardContent,
-  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   TextField,
   Grid,
   Divider,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { VisionService } from "../services/api";
 
-// 파일 업로드 스타일 컴포넌트
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+interface DetectedObject {
+  name: string;
+  confidence: number;
+}
 
-const ImageStyle = () => {
-  const [imageUrl, setImageUrl] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [keywords, setKeywords] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+const ObjectDetection: React.FC = () => {
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imagePreview, setImagePreview] = useState<string>("");
+  const [detectedObjects, setDetectedObjects] = useState<DetectedObject[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  const handleImageUrlChange = (e) => {
+  const handleImageUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
     setImageUrl(e.target.value);
   };
 
@@ -50,24 +45,29 @@ const ImageStyle = () => {
 
     setLoading(true);
     setError("");
-    setKeywords([]);
+    setDetectedObjects([]);
     setImagePreview(imageUrl);
 
     try {
-      const response = await VisionService.extractStyle(imageUrl);
-      setKeywords(response.keywords);
+      const response = await VisionService.detectObjects(imageUrl);
+      setDetectedObjects(response.objects);
     } catch (err) {
-      setError("스타일 분석 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setError("객체 탐지 중 오류가 발생했습니다. 다시 시도해주세요.");
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
+  // 신뢰도를 퍼센트로 변환
+  const confidenceToPercent = (confidence: number): number => {
+    return Math.round(confidence * 100);
+  };
+
   return (
     <Container maxWidth="md" sx={{ my: 4 }}>
       <Typography variant="h4" component="h1" gutterBottom textAlign="center">
-        이미지 스타일 분석
+        인테리어 객체 탐지
       </Typography>
       <Typography
         variant="body1"
@@ -75,7 +75,7 @@ const ImageStyle = () => {
         textAlign="center"
         color="text.secondary"
       >
-        인테리어 이미지를 분석하여 스타일 키워드를 추출합니다.
+        인테리어 이미지에서 가구 및 주요 객체를 탐지합니다.
       </Typography>
 
       <Paper elevation={3} sx={{ p: 3, mb: 4 }}>
@@ -96,7 +96,7 @@ const ImageStyle = () => {
             onClick={handleUrlSubmit}
             disabled={loading || !imageUrl}
           >
-            분석
+            탐지
           </Button>
         </Box>
         <Divider sx={{ my: 2 }} />
@@ -118,7 +118,7 @@ const ImageStyle = () => {
         </Alert>
       )}
 
-      {imagePreview && keywords.length > 0 && (
+      {imagePreview && detectedObjects.length > 0 && (
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Card>
@@ -136,9 +136,12 @@ const ImageStyle = () => {
                     borderRadius: 1,
                     mb: 2,
                   }}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src =
+                  onError={(
+                    e: React.SyntheticEvent<HTMLImageElement, Event>
+                  ) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src =
                       "https://via.placeholder.com/400x300?text=이미지+로드+실패";
                   }}
                 />
@@ -149,27 +152,41 @@ const ImageStyle = () => {
             <Card sx={{ height: "100%" }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  스타일 키워드
+                  탐지된 객체
                 </Typography>
-                <Box sx={{ mt: 2 }}>
-                  {keywords.map((keyword, index) => (
-                    <Chip
-                      key={index}
-                      label={keyword}
-                      color="primary"
-                      sx={{ m: 0.5 }}
-                    />
-                  ))}
-                </Box>
-                <Typography variant="body2" sx={{ mt: 3 }}>
-                  이 키워드들은 이미지에서 감지된 인테리어 스타일을 나타냅니다.
-                  텍스트 프롬프트와 함께 사용하면 더 정확한 결과를 얻을 수
-                  있습니다.
-                </Typography>
+                <TableContainer>
+                  <Table aria-label="탐지된 객체 테이블">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>객체</TableCell>
+                        <TableCell align="right">신뢰도</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {detectedObjects.map((object, index) => (
+                        <TableRow key={index}>
+                          <TableCell component="th" scope="row">
+                            {object.name}
+                          </TableCell>
+                          <TableCell align="right">
+                            {confidenceToPercent(object.confidence)}%
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
+      )}
+
+      {imagePreview && detectedObjects.length === 0 && !loading && (
+        <Alert severity="info" sx={{ mb: 3 }}>
+          이미지에서 인테리어 객체를 찾을 수 없습니다. 다른 이미지를
+          시도해보세요.
+        </Alert>
       )}
 
       <Paper elevation={1} sx={{ p: 3, bgcolor: "grey.50", mt: 4 }}>
@@ -177,15 +194,15 @@ const ImageStyle = () => {
           💡 팁
         </Typography>
         <Typography variant="body2">
-          - 스타일이 명확하게 드러난 인테리어 이미지를 사용하세요.
+          - 가구와 인테리어 소품이 잘 보이는 이미지를 사용하세요.
           <br />
-          - 높은 해상도의 이미지가 더 정확한 결과를 제공합니다.
-          <br />- 추출된 키워드를 텍스트 프롬프트에 활용하여 더 구체적인
-          인테리어 디자인을 생성할 수 있습니다.
+          - 높은 해상도의 이미지가 더 정확한 탐지 결과를 제공합니다.
+          <br />- 탐지된 객체를 참고하여 텍스트 프롬프트에 구체적인 가구 배치를
+          명시할 수 있습니다.
         </Typography>
       </Paper>
     </Container>
   );
 };
 
-export default ImageStyle;
+export default ObjectDetection;

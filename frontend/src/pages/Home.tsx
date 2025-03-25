@@ -9,14 +9,20 @@ import {
   Card,
   CardContent,
   CardActions,
-  CardMedia,
   Paper,
 } from "@mui/material";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
 import SearchIcon from "@mui/icons-material/Search";
 
-const features = [
+interface Feature {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  link: string;
+}
+
+const features: Feature[] = [
   {
     title: "텍스트 기반 프롬프트 생성",
     description:
@@ -40,7 +46,7 @@ const features = [
   },
 ];
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
       <Paper elevation={3} sx={{ p: 4, mb: 4, borderRadius: 2 }}>

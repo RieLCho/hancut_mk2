@@ -30,6 +30,12 @@ services:
       - .env
     environment:
       - NODE_ENV=development
-      - REACT_APP_API_URL=http://localhost:8000
+      - VITE_API_URL=http://localhost:8000
     depends_on:
       - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

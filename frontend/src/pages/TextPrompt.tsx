@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent, ChangeEvent } from "react";
 import {
   Container,
   Typography,
@@ -13,17 +13,17 @@ import {
 } from "@mui/material";
 import { LLMService } from "../services/api";
 
-const TextPrompt = () => {
-  const [text, setText] = useState("");
-  const [prompt, setPrompt] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+const TextPrompt: React.FC = () => {
+  const [text, setText] = useState<string>("");
+  const [prompt, setPrompt] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
-  const handleTextChange = (e) => {
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!text.trim()) {
       setError("텍스트를 입력해주세요.");
