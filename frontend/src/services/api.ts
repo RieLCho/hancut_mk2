@@ -12,9 +12,8 @@ interface VisionStyleResponse {
 
 interface VisionObjectResponse {
   objects: Array<{
-    name: string;
+    label: string;
     confidence: number;
-    // 필요한 다른 객체 필드 추가
   }>;
 }
 

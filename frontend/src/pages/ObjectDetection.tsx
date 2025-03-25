@@ -22,7 +22,7 @@ import {
 import { VisionService } from "../services/api";
 
 interface DetectedObject {
-  name: string;
+  label: string;
   confidence: number;
 }
 
@@ -166,7 +166,7 @@ const ObjectDetection: React.FC = () => {
                       {detectedObjects.map((object, index) => (
                         <TableRow key={index}>
                           <TableCell component="th" scope="row">
-                            {object.name}
+                            {object.label}
                           </TableCell>
                           <TableCell align="right">
                             {confidenceToPercent(object.confidence)}%
