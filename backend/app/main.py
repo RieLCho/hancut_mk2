@@ -8,6 +8,7 @@ load_dotenv()
 
 # 라우트 임포트
 from app.routes import llm_routes, vision_routes
+from app.services.vision_service import vision_service
 
 # FastAPI 앱 초기화
 app = FastAPI(
@@ -33,6 +34,22 @@ app.include_router(vision_routes.router, prefix="/api/vision", tags=["Vision"])
 @app.get("/")
 async def root():
     return {"message": "인테리어 프롬프트 생성 API에 오신 것을 환영합니다!"}
+
+@app.on_event("startup")
+async def startup_event():
+    """서버 시작 시 모델 초기화"""
+    print("서버 시작: 모델 초기화 중...")
+    try:
+        # CLIP 모델 초기화
+        vision_service._load_clip_model()
+        print("CLIP 모델 초기화 완료")
+        
+        # Faster R-CNN 모델 초기화
+        vision_service._load_rcnn_model()
+        print("Faster R-CNN 모델 초기화 완료")
+    except Exception as e:
+        print(f"모델 초기화 중 오류 발생: {str(e)}")
+        raise e
 
 # 서버 실행 코드 (직접 실행 시)
 if __name__ == "__main__":

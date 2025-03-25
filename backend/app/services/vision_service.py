@@ -18,6 +18,13 @@ class VisionService:
         self._clip_processor = None
         self._rcnn_model = None
         self._rcnn_weights = None
+        
+        # 캐시 디렉토리 설정
+        self._cache_dir = os.path.expanduser("~/.cache/torch/hub")
+        os.makedirs(self._cache_dir, exist_ok=True)
+        print(f"캐시 디렉토리: {self._cache_dir}")
+        
+        # COCO 데이터셋 라벨
         self._coco_labels = [
             "background", "person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat",
             "traffic light", "fire hydrant", "street sign", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse",
@@ -46,18 +53,39 @@ class VisionService:
         """CLIP 모델 로드"""
         if self._clip_model is None:
             print("CLIP 모델 로드 중...")
-            self._clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
-            self._clip_processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-            print("CLIP 모델 로드 완료")
+            try:
+                self._clip_model = CLIPModel.from_pretrained(
+                    "openai/clip-vit-base-patch32",
+                    cache_dir=self._cache_dir
+                )
+                self._clip_processor = CLIPProcessor.from_pretrained(
+                    "openai/clip-vit-base-patch32",
+                    cache_dir=self._cache_dir
+                )
+                print("CLIP 모델 로드 완료")
+            except Exception as e:
+                print(f"CLIP 모델 로드 중 오류 발생: {str(e)}")
+                raise e
     
     def _load_rcnn_model(self):
         """Faster R-CNN 모델 로드"""
         if self._rcnn_model is None:
             print("Faster R-CNN 모델 로드 중...")
-            self._rcnn_weights = FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT
-            self._rcnn_model = fasterrcnn_resnet50_fpn_v2(weights=self._rcnn_weights)
-            self._rcnn_model.eval()
-            print("Faster R-CNN 모델 로드 완료")
+            try:
+                print("모델 가중치 다운로드 중...")
+                self._rcnn_weights = FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT
+                print("모델 초기화 중...")
+                self._rcnn_model = fasterrcnn_resnet50_fpn_v2(
+                    weights=self._rcnn_weights,
+                    cache_dir=self._cache_dir
+                )
+                print("모델을 평가 모드로 설정 중...")
+                self._rcnn_model.eval()
+                print("Faster R-CNN 모델 로드 완료")
+            except Exception as e:
+                print(f"Faster R-CNN 모델 로드 중 오류 발생: {str(e)}")
+                print(f"현재 캐시 디렉토리 내용: {os.listdir(self._cache_dir)}")
+                raise e
     
     async def _load_image_from_url(self, image_url: str) -> Image.Image:
         """URL에서 이미지 로드"""
