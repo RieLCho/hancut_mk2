@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import {
   AppBar,
@@ -19,12 +19,18 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
 import SearchIcon from "@mui/icons-material/Search";
 
-const Header = () => {
+interface MenuItem {
+  label: string;
+  path: string;
+  icon: React.ReactNode;
+}
+
+const Header: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleMenu = (event) => {
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -32,7 +38,7 @@ const Header = () => {
     setAnchorEl(null);
   };
 
-  const menuItems = [
+  const menuItems: MenuItem[] = [
     { label: "홈", path: "/", icon: <HomeIcon /> },
     {
       label: "텍스트 프롬프트",

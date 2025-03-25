@@ -19,9 +19,10 @@
    - 인테리어 이미지에서 가구 및 주요 객체 탐지
    - 의자, 소파, 식물, 침대, 거울 등 인테리어 요소 식별
 
-4. **웹 인터페이스 (FastAPI + React)**
+4. **웹 인터페이스 (FastAPI + React + TypeScript)**
    - 직관적이고 사용하기 쉬운 웹 인터페이스
    - 반응형 디자인으로 모바일 및 데스크톱 지원
+   - TypeScript를 통한 타입 안정성 강화
 
 ## 프로젝트 구조
 
@@ -36,7 +37,7 @@ hancut_mk2/
 │   ├── .env         # 환경 변수
 │   ├── Dockerfile   # 백엔드 Docker 설정
 │   └── requirements.txt # Python 의존성
-├── frontend/        # React 프론트엔드
+├── frontend/        # React + TypeScript 프론트엔드
 │   ├── public/      # 정적 파일
 │   ├── src/         # 소스 코드
 │   │   ├── components/ # 재사용 가능한 컴포넌트
@@ -44,7 +45,9 @@ hancut_mk2/
 │   │   └── services/# API 서비스
 │   ├── .env         # 환경 변수
 │   ├── Dockerfile   # 프론트엔드 Docker 설정
-│   └── package.json # NPM 의존성
+│   ├── package.json # NPM 의존성
+│   ├── tsconfig.json # TypeScript 설정
+│   └── vite.config.ts # Vite 설정
 ├── docker-compose.yml # Docker 구성
 └── start.sh         # 실행 스크립트
 ```
@@ -54,7 +57,7 @@ hancut_mk2/
 ### 필수 조건
 
 - Python 3.8 이상
-- Node.js 16 이상
+- Node.js 22 이상 (프론트엔드)
 - Docker 및 Docker Compose (선택사항)
 - OpenAI API 키
 
@@ -71,7 +74,7 @@ hancut_mk2/
 1. Docker와 Docker Compose가 설치되어 있는지 확인합니다.
 2. 다음 명령어로 애플리케이션을 실행합니다:
    ```bash
-   docker-compose up
+   docker compose up --build
    ```
 3. 브라우저에서 http://localhost:3000 으로 접속합니다.
 
@@ -92,19 +95,12 @@ hancut_mk2/
    ```bash
    cd frontend
    npm install
-   npm start
+   npm run dev
    ```
 
 3. 브라우저에서 http://localhost:3000 으로 접속합니다.
 
-### 방법 3: 스크립트 사용
-
-제공된 스크립트를 사용하여 자동으로 설치 및 실행:
-
-```bash
-chmod +x start.sh  # 실행 권한 부여
-./start.sh
-```
+## 최근 업데이트
 
 ## API 문서
 

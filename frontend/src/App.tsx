@@ -4,12 +4,12 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 // 컴포넌트 임포트
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
-import TextPrompt from "./pages/TextPrompt";
-import ImageStyle from "./pages/ImageStyle";
-import ObjectDetection from "./pages/ObjectDetection";
+import Header from "./components/Header.tsx";
+import Footer from "./components/Footer.tsx";
+import Home from "./pages/Home.tsx";
+import TextPrompt from "./pages/TextPrompt.tsx";
+import ImageStyle from "./pages/ImageStyle.tsx";
+import ObjectDetection from "./pages/ObjectDetection.tsx";
 
 // 테마 설정
 const theme = createTheme({
@@ -41,7 +41,7 @@ const theme = createTheme({
   },
 });
 
-function App() {
+const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -57,6 +57,6 @@ function App() {
       <Footer />
     </ThemeProvider>
   );
-}
+};
 
 export default App;

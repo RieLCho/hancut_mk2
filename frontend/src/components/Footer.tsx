@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Container, Typography, Link } from "@mui/material";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <Box
       component="footer"
