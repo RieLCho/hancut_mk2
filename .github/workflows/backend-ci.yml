@@ -1,0 +1,51 @@
+name: Backend CI
+
+on:
+  pull_request:
+    paths:
+      - "backend/**"
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t hancut-backend:test ./backend
+
+      - name: Create environment file
+        run: |
+          cd backend
+          cp .env.example .env
+
+      - name: Run application and check startup
+        run: |
+          docker run -d --name backend-test -p 8000:8000 hancut-backend:test
+          # 애플리케이션이 시작될 때까지 대기 (최대 30초)
+          timeout=30
+          echo "Waiting for application to start (up to $timeout seconds)..."
+
+          for i in $(seq 1 $timeout); do
+            if docker logs backend-test 2>&1 | grep -q "Application startup complete"; then
+              echo "✅ Application started successfully"
+              docker logs backend-test
+              exit 0
+            elif docker logs backend-test 2>&1 | grep -q "Uvicorn running on"; then
+              echo "✅ Application started successfully (Uvicorn running)"
+              docker logs backend-test
+              exit 0
+            fi
+            sleep 1
+            echo "Waiting... ($i/$timeout)"
+          done
+
+          echo "❌ Application failed to start within $timeout seconds"
+          docker logs backend-test
+          exit 1
