@@ -5,6 +5,11 @@ interface LLMResponse {
   // 필요한 다른 응답 필드 추가
 }
 
+interface LLMImageResponse {
+  image_url: string;
+  prompt: string;
+}
+
 interface VisionStyleResponse {
   keywords: string[];
   // 필요한 다른 응답 필드 추가
@@ -36,6 +41,19 @@ export const LLMService = {
       return response.data;
     } catch (error) {
       console.error("텍스트 프롬프트 생성 오류:", error);
+      throw error;
+    }
+  },
+
+  // DALL-E 3 이미지 생성
+  generateImage: async (prompt: string): Promise<LLMImageResponse> => {
+    try {
+      const response = await api.post<LLMImageResponse>("/api/llm/generate-image", {
+        prompt,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("이미지 생성 오류:", error);
       throw error;
     }
   },

@@ -2,11 +2,16 @@ import os
 import io
 import torch
 import numpy as np
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import requests
 from transformers import CLIPProcessor, CLIPModel
 from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2, FasterRCNN_ResNet50_FPN_V2_Weights
 from torchvision.transforms import functional as F
+import logging
+
+# 로깅 설정
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class VisionService:
     """이미지 분석 서비스: 스타일 추출 및 객체 탐지"""
@@ -22,7 +27,7 @@ class VisionService:
         # 캐시 디렉토리 설정
         self._cache_dir = os.path.expanduser("~/.cache/torch/hub")
         os.makedirs(self._cache_dir, exist_ok=True)
-        print(f"캐시 디렉토리: {self._cache_dir}")
+        logger.info(f"캐시 디렉토리: {self._cache_dir}")
         
         # COCO 데이터셋 라벨
         self._coco_labels = [
@@ -52,7 +57,7 @@ class VisionService:
     def _load_clip_model(self):
         """CLIP 모델 로드"""
         if self._clip_model is None:
-            print("CLIP 모델 로드 중...")
+            logger.info("CLIP 모델 로드 중...")
             try:
                 self._clip_model = CLIPModel.from_pretrained(
                     "openai/clip-vit-base-patch32",
@@ -62,19 +67,19 @@ class VisionService:
                     "openai/clip-vit-base-patch32",
                     cache_dir=self._cache_dir
                 )
-                print("CLIP 모델 로드 완료")
+                logger.info("CLIP 모델 로드 완료")
             except Exception as e:
-                print(f"CLIP 모델 로드 중 오류 발생: {str(e)}")
+                logger.error(f"CLIP 모델 로드 중 오류 발생: {str(e)}")
                 raise e
     
     def _load_rcnn_model(self):
         """Faster R-CNN 모델 로드"""
         if self._rcnn_model is None:
-            print("Faster R-CNN 모델 로드 중...")
+            logger.info("Faster R-CNN 모델 로드 중...")
             try:
-                print("모델 초기화 중...")
+                logger.info("모델 초기화 중...")
                 self._rcnn_model = fasterrcnn_resnet50_fpn_v2(pretrained=False)
-                print("모델 가중치 다운로드 중...")
+                logger.info("모델 가중치 다운로드 중...")
                 self._rcnn_weights = FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT
                 state_dict = torch.hub.load_state_dict_from_url(
                     self._rcnn_weights.url,
@@ -82,19 +87,50 @@ class VisionService:
                     progress=True
                 )
                 self._rcnn_model.load_state_dict(state_dict)
-                print("모델을 평가 모드로 설정 중...")
+                logger.info("모델을 평가 모드로 설정 중...")
                 self._rcnn_model.eval()
-                print("Faster R-CNN 모델 로드 완료")
+                logger.info("Faster R-CNN 모델 로드 완료")
             except Exception as e:
-                print(f"Faster R-CNN 모델 로드 중 오류 발생: {str(e)}")
-                print(f"현재 캐시 디렉토리 내용: {os.listdir(self._cache_dir)}")
+                logger.error(f"Faster R-CNN 모델 로드 중 오류 발생: {str(e)}")
+                logger.info(f"현재 캐시 디렉토리 내용: {os.listdir(self._cache_dir)}")
                 raise e
     
     async def _load_image_from_url(self, image_url: str) -> Image.Image:
         """URL에서 이미지 로드"""
-        response = requests.get(image_url)
-        response.raise_for_status()
-        return Image.open(io.BytesIO(response.content)).convert("RGB")
+        try:
+            logger.info(f"이미지 다운로드 시도: {image_url}")
+            response = requests.get(image_url)
+            response.raise_for_status()
+            
+            # 이미지 데이터 확인
+            image_data = response.content
+            logger.info(f"다운로드 완료: {len(image_data)} 바이트")
+            
+            # 이미지 열기 전 파일 헤더 체크 (간단한 검증)
+            if len(image_data) < 10:
+                logger.error(f"이미지 데이터가 너무 작음: {len(image_data)} 바이트")
+                raise ValueError("이미지 데이터가 유효하지 않습니다")
+            
+            # BytesIO로 변환하여 PIL로 열기
+            image_bytes = io.BytesIO(image_data)
+            try:
+                image = Image.open(image_bytes).convert("RGB")
+                logger.info(f"이미지 로드 성공: {image.format}, {image.size}")
+                return image
+            except UnidentifiedImageError as img_err:
+                logger.error(f"이미지 형식 인식 불가: {str(img_err)}")
+                # 이미지 형식 문제라면 더 자세한 로그 남기기
+                header_bytes = image_data[:20]
+                hex_header = ' '.join([f'{b:02x}' for b in header_bytes])
+                logger.error(f"이미지 헤더 (hex): {hex_header}")
+                raise ValueError(f"이미지 형식을 인식할 수 없습니다: {str(img_err)}")
+                
+        except requests.RequestException as req_err:
+            logger.error(f"이미지 다운로드 중 요청 오류: {str(req_err)}")
+            raise ValueError(f"이미지 URL에 접근할 수 없습니다: {str(req_err)}")
+        except Exception as e:
+            logger.error(f"이미지 로드 중 예상치 못한 오류: {str(e)}")
+            raise ValueError(f"이미지 로드 실패: {str(e)}")
     
     async def extract_style(self, image_url: str) -> list:
         """이미지에서 스타일 키워드 추출"""
@@ -129,7 +165,7 @@ class VisionService:
             return top_styles
             
         except Exception as e:
-            print(f"스타일 추출 오류: {str(e)}")
+            logger.error(f"스타일 추출 오류: {str(e)}")
             return ["modern"]  # 오류 시 기본 스타일 반환
     
     async def detect_objects(self, image_url: str) -> list:
@@ -163,8 +199,8 @@ class VisionService:
             return detected_objects
             
         except Exception as e:
-            print(f"객체 탐지 오류: {str(e)}")
+            logger.error(f"객체 탐지 오류: {str(e)}")
             return []  # 오류 시 빈 리스트 반환
 
 # 서비스 인스턴스 생성
-vision_service = VisionService() 
+vision_service = VisionService()

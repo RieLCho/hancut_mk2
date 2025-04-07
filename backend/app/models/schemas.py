@@ -17,6 +17,15 @@ class ObjectDetectionRequest(BaseModel):
 class PromptResponse(BaseModel):
     prompt: str = Field(..., description="생성된 인테리어 프롬프트")
     
+# 이미지 생성 요청 모델
+class ImageGenerationRequest(BaseModel):
+    prompt: str = Field(..., description="이미지 생성을 위한 프롬프트")
+    
+# 이미지 생성 응답 모델
+class ImageGenerationResponse(BaseModel):
+    image_url: str = Field(..., description="생성된 이미지 URL")
+    prompt: str = Field(..., description="사용된 프롬프트")
+    
 # 스타일 분석 응답 모델
 class StyleAnalysisResponse(BaseModel):
     keywords: List[str] = Field(..., description="추출된 스타일 키워드 목록")
@@ -27,4 +36,4 @@ class DetectedObject(BaseModel):
     confidence: float = Field(..., description="탐지 신뢰도")
     
 class ObjectDetectionResponse(BaseModel):
-    objects: List[DetectedObject] = Field(..., description="탐지된 객체 목록") 
+    objects: List[DetectedObject] = Field(..., description="탐지된 객체 목록")
