@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 라우트 임포트
-from app.routes import llm_routes, vision_routes
+from app.routes import llm_routes, vision_routes, style_llm_routes
 from app.services.vision_service import vision_service
 
 # FastAPI 앱 초기화
@@ -29,6 +29,7 @@ app.add_middleware(
 # 라우트 등록
 app.include_router(llm_routes.router, prefix="/api/llm", tags=["LLM"])
 app.include_router(vision_routes.router, prefix="/api/vision", tags=["Vision"])
+app.include_router(style_llm_routes.router, prefix="/api/style-llm", tags=["Style-LLM"])
 
 # 루트 라우트
 @app.get("/")
