@@ -17,14 +17,14 @@ async def generate_prompt_with_style(img_request: ImageStyleRequest, text_reques
     try:
         if not img_request.image_url:
             raise HTTPException(status_code=400, detail="이미지 URL이 필요합니다")
-            
+
+        # 상위 3개 스타일 추출  
         keywords = await vision_service.extract_style(img_request.image_url)
-        keywords
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"스타일 추출 오류: {str(e)}")
     try:
-        keywords
-        prompt = await llm_service.generate_interior_prompt(text_request.text)
+        # 스타일 기반 프롬프트 생성
+        prompt = await llm_service.generate_interior_prompt_with_style(text_request.text, keywords)
         return PromptResponse(prompt=prompt)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"프롬프트 생성 오류: {str(e)}")
