@@ -10,6 +10,9 @@ import {
   Alert,
   Card,
   CardContent,
+  Grid,
+  Divider,
+  CardMedia,
 } from "@mui/material";
 import { LLMService } from "../services/api";
 
@@ -17,7 +20,10 @@ const TextPrompt: React.FC = () => {
   const [text, setText] = useState<string>("");
   const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [imageUrl, setImageUrl] = useState<string>("");
+  const [imageError, setImageError] = useState<string>("");
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -33,6 +39,8 @@ const TextPrompt: React.FC = () => {
     setLoading(true);
     setError("");
     setPrompt("");
+    setImageUrl("");
+    setImageError("");
 
     try {
       const response = await LLMService.generatePrompt(text);
@@ -42,6 +50,27 @@ const TextPrompt: React.FC = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGenerateImage = async () => {
+    if (!prompt) {
+      setImageError("생성된 프롬프트가 없습니다.");
+      return;
+    }
+
+    setImageLoading(true);
+    setImageError("");
+    setImageUrl("");
+
+    try {
+      const response = await LLMService.generateImage(prompt);
+      setImageUrl(response.image_url);
+    } catch (err) {
+      setImageError("이미지 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
+      console.error(err);
+    } finally {
+      setImageLoading(false);
     }
   };
 
@@ -97,20 +126,66 @@ const TextPrompt: React.FC = () => {
       )}
 
       {prompt && (
-        <Card sx={{ mb: 4 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              생성된 프롬프트
-            </Typography>
-            <Typography
-              variant="body1"
-              component="div"
-              sx={{ whiteSpace: "pre-wrap" }}
-            >
-              {prompt}
-            </Typography>
-          </CardContent>
-        </Card>
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  생성된 프롬프트
+                </Typography>
+                <Typography
+                  variant="body1"
+                  component="div"
+                  sx={{ whiteSpace: "pre-wrap" }}
+                >
+                  {prompt}
+                </Typography>
+                <Box sx={{ mt: 2, display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleGenerateImage}
+                    disabled={imageLoading}
+                  >
+                    {imageLoading ? (
+                      <CircularProgress size={24} color="inherit" />
+                    ) : (
+                      "DALL-E 3 이미지 생성하기"
+                    )}
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {imageError && (
+            <Grid item xs={12}>
+              <Alert severity="error">{imageError}</Alert>
+            </Grid>
+          )}
+
+          {imageUrl && (
+            <Grid item xs={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    DALL-E 3 생성 이미지
+                  </Typography>
+                </CardContent>
+                <CardMedia
+                  component="img"
+                  image={imageUrl}
+                  alt="Generated interior design"
+                  sx={{
+                    width: "100%",
+                    maxHeight: "600px",
+                    objectFit: "contain"
+                  }}
+                />
+              </Card>
+            </Grid>
+          )}
+        </Grid>
       )}
 
       <Paper elevation={1} sx={{ p: 3, bgcolor: "grey.50" }}>
