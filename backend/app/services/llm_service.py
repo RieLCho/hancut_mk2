@@ -10,7 +10,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class LLMService:
-    """GPT-3.5-turbo를 이용한 인테리어 프롬프트 생성 서비스"""
+    """GPT-3.5-turbo를 이용한 인테리어 프롬프트 생성 및 DALL-E 3 이미지 생성 서비스"""
 
     @staticmethod
     async def generate_interior_prompt(text: str) -> str:
@@ -66,6 +66,40 @@ class LLMService:
         except Exception as e:
             print(f"LLM 서비스 오류: {str(e)}")
             return f"프롬프트 생성 중 오류가 발생했습니다: {str(e)}"
+    
+    @staticmethod
+    async def generate_image_with_dalle(prompt: str) -> dict:
+        """
+        DALL-E 3을 사용하여 프롬프트 기반으로 이미지를 생성합니다.
+        
+        Args:
+            prompt (str): 이미지 생성에 사용할 프롬프트
+            
+        Returns:
+            dict: 이미지 URL이 포함된 응답 딕셔너리
+        """
+        try:
+            # DALL-E 3 API 호출
+            response = await openai.Image.acreate(
+                model="dall-e-3",
+                prompt=prompt,
+                size="1024x1792",  # 세로형 이미지 (인테리어에 적합)
+                quality="standard",
+                n=1,  # 이미지 1개 생성
+                response_format="url"
+            )
+            
+            # 응답에서 이미지 URL 추출
+            image_url = response.data[0].url
+            
+            return {
+                "image_url": image_url,
+                "prompt": prompt
+            }
+                
+        except Exception as e:
+            print(f"DALL-E 이미지 생성 오류: {str(e)}")
+            raise Exception(f"이미지 생성 중 오류가 발생했습니다: {str(e)}")
 
     @staticmethod
     async def generate_interior_prompt_with_style(text: str, style_keywords: list) -> str:
@@ -136,4 +170,4 @@ class LLMService:
             return f"프롬프트 생성 중 오류가 발생했습니다: {str(e)}"
 
 # 서비스 인스턴스 생성
-llm_service = LLMService() 
+llm_service = LLMService()
