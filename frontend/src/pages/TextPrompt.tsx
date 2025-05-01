@@ -11,7 +11,6 @@ import {
   Card,
   CardContent,
   Grid,
-  Divider,
   CardMedia,
 } from "@mui/material";
 import { LLMService } from "../services/api";
@@ -179,7 +178,7 @@ const TextPrompt: React.FC = () => {
                   sx={{
                     width: "100%",
                     maxHeight: "600px",
-                    objectFit: "contain"
+                    objectFit: "contain",
                   }}
                 />
               </Card>
