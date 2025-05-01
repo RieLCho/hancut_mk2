@@ -3,6 +3,7 @@ from app.models.schemas import ImageStyleRequest, ObjectDetectionRequest,  Image
 from app.models.schemas import TextPromptRequest
 from app.routes import llm_routes, vision_routes
 from app.services.llm_service import llm_service
+from app.services.vision_service import vision_service
 
 router = APIRouter()
 
@@ -21,21 +22,24 @@ async def generate_hancut_image(text_request: TextPromptRequest, style_img_reque
 
     try:
         # 스타일 추출
-        styles = await vision_routes.extract_style(style_img_request)
+        styles = await vision_service.extract_style(style_img_request.image_url)
+
         # 인테리어 객체 추출
-        objects = await vision_routes.detect_objects(object_img_request)
+        objects_data = await vision_service.detect_objects(object_img_request.image_url)
+        objects = [obj["label"] for obj in objects_data]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"vision model 오류: {str(e)}")
   
     try:
         # 스타일, 객체, 텍스트 기반 프롬프트 생성
-        prompt = await llm_service.generate_hancut_prompt(text_request.text, styles.keywords, objects.objects)
+        prompt = await llm_service.generate_hancut_prompt(text_request.text, styles, objects)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"프롬프트 생성 오류: {str(e)}")
     
     try:
         # 프롬프트 기반 이미지 생성
-        result = await llm_routes.generate_image(ImageGenerationRequest(prompt=prompt))
-        return result
+        result = await llm_service.generate_image_with_dalle(prompt)
+        return ImageGenerationResponse(image_url=result["image_url"], prompt=result["prompt"])
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"이미지 생성 오류: {str(e)}")
