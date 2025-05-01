@@ -11,20 +11,16 @@ class ImageStyleRequest(BaseModel):
     
 # 객체 탐지 요청 모델
 class ObjectDetectionRequest(BaseModel):
-    image_url: str = Field(..., description="객체 탐지를 위한 이미지 URL")
+    image_url: Optional[str] = Field(None, description="객체 탐지를 위한 이미지 URL")
 
-# 프롬프트 응답 모델
-class PromptResponse(BaseModel):
-    prompt: str = Field(..., description="생성된 인테리어 프롬프트")
-    
 # 이미지 생성 요청 모델
 class ImageGenerationRequest(BaseModel):
     prompt: str = Field(..., description="이미지 생성을 위한 프롬프트")
-    
-# 이미지 생성 응답 모델
-class ImageGenerationResponse(BaseModel):
-    image_url: str = Field(..., description="생성된 이미지 URL")
-    prompt: str = Field(..., description="사용된 프롬프트")
+
+
+# 프롬프트 응답 모델
+class PromptResponse(BaseModel):
+    prompt: str = Field(..., description="생성된 인테리어 프롬프트") 
     
 # 스타일 분석 응답 모델
 class StyleAnalysisResponse(BaseModel):
@@ -37,3 +33,8 @@ class DetectedObject(BaseModel):
     
 class ObjectDetectionResponse(BaseModel):
     objects: List[DetectedObject] = Field(..., description="탐지된 객체 목록")
+
+# 이미지 생성 응답 모델
+class ImageGenerationResponse(BaseModel):
+    image_url: str = Field(..., description="생성된 이미지 URL")
+    prompt: str = Field(..., description="사용된 프롬프트")
