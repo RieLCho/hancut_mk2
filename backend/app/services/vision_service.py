@@ -77,23 +77,7 @@ class VisionService:
         if self._rcnn_model is None:
             logger.info("Faster R-CNN 모델 로드 중...")
             try:
-                print("모델 초기화 중...")
-                
-                # 캐시 디렉토리 확인
-                checkpoints_dir = os.path.join(self._cache_dir, "checkpoints")
-                os.makedirs(checkpoints_dir, exist_ok=True)
-                
-                # 캐시 파일 경로 설정
-                self._rcnn_weights = FasterRCNN_ResNet50_FPN_V2_Weights.DEFAULT
-                model_url = self._rcnn_weights.url
-                filename = os.path.basename(model_url)
-                cached_file = os.path.join(checkpoints_dir, filename)
-                
-                # 기존 캐시 파일이 존재하면 삭제 (손상된 파일일 수 있음)
-                if os.path.exists(cached_file):
-                    print(f"기존 캐시 파일 삭제 중: {cached_file}")
-                    os.remove(cached_file)
-                
+                print("모델 초기화 중...")            
                 # 모델 생성
                 self._rcnn_model = fasterrcnn_resnet50_fpn_v2(weights=self._rcnn_weights)
                 self._rcnn_model.eval()
