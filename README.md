@@ -35,7 +35,6 @@ hancut_mk2/
 │   │   ├── services/# 비즈니스 로직
 │   │   └── main.py  # 애플리케이션 진입점
 │   ├── .env         # 환경 변수
-│   ├── Dockerfile   # 백엔드 Docker 설정
 │   └── pyproject.toml # Python 의존성 및 프로젝트 설정
 ├── frontend/        # React + TypeScript 프론트엔드
 │   ├── public/      # 정적 파일
@@ -44,11 +43,9 @@ hancut_mk2/
 │   │   ├── pages/   # 페이지 컴포넌트
 │   │   └── services/# API 서비스
 │   ├── .env         # 환경 변수
-│   ├── Dockerfile   # 프론트엔드 Docker 설정
 │   ├── package.json # NPM 의존성
 │   ├── tsconfig.json # TypeScript 설정
 │   └── vite.config.ts # Vite 설정
-├── docker-compose.yml # Docker 구성
 └── start.sh         # 실행 스크립트
 ```
 
@@ -58,7 +55,6 @@ hancut_mk2/
 
 - Python 3.10.17
 - Node.js 22 이상 (프론트엔드)
-- Docker 및 Docker Compose (선택사항)
 - OpenAI API 키
 
 ### 환경 변수 설정
@@ -69,16 +65,15 @@ hancut_mk2/
    # OPENAI_API_KEY 값을 수정하세요
    ```
 
-### 방법 1: Docker 사용 (권장)
+### 실행 방법 1: 시작 스크립트 사용 (권장)
 
-1. Docker와 Docker Compose가 설치되어 있는지 확인합니다.
-2. 다음 명령어로 애플리케이션을 실행합니다:
+1. 제공된 스크립트를 사용하여 백엔드와 프론트엔드를 한 번에 실행합니다:
    ```bash
-   docker compose up --build
+   ./start.sh
    ```
-3. 브라우저에서 http://localhost:3000 으로 접속합니다.
+2. 브라우저에서 http://localhost:3000 으로 접속합니다.
 
-### 방법 2: 로컬 설치
+### 실행 방법 2: 수동 설치 및 실행
 
 1. 백엔드 설치 및 실행:
 
@@ -151,4 +146,3 @@ FastAPI는 자동으로 API 문서를 생성합니다:
 - **백엔드**: FastAPI, Python 3.10.17, OpenAI API, Hugging Face Transformers, PyTorch
 - **패키지 관리**: UV (ultrafast pip replacement)
 - **프론트엔드**: React, Material-UI
-- **인프라**: Docker, Docker Compose
