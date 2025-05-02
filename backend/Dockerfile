@@ -15,6 +15,9 @@ COPY pyproject.toml .
 # UV로 의존성 설치
 RUN uv sync
 
+# uvicorn 명시적 설치
+RUN pip install uvicorn
+
 COPY . .
 
 EXPOSE 8000
