@@ -32,7 +32,8 @@ if [ ! -d ".venv" ]; then
     uv venv .venv
 fi
 source .venv/bin/activate
-uv pip install -r requirements.txt
+# pyproject.toml에서 의존성 설치
+uv sync
 uvicorn app.main:app --reload &
 cd ..
 

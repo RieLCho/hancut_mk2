@@ -36,7 +36,7 @@ hancut_mk2/
 │   │   └── main.py  # 애플리케이션 진입점
 │   ├── .env         # 환경 변수
 │   ├── Dockerfile   # 백엔드 Docker 설정
-│   └── requirements.txt # Python 의존성
+│   └── pyproject.toml # Python 의존성 및 프로젝트 설정
 ├── frontend/        # React + TypeScript 프론트엔드
 │   ├── public/      # 정적 파일
 │   ├── src/         # 소스 코드
@@ -56,7 +56,7 @@ hancut_mk2/
 
 ### 필수 조건
 
-- Python 3.8 이상
+- Python 3.10.17
 - Node.js 22 이상 (프론트엔드)
 - Docker 및 Docker Compose (선택사항)
 - OpenAI API 키
@@ -94,7 +94,7 @@ hancut_mk2/
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
    
    # 의존성 설치 및 서버 실행
-   uv pip install -r requirements.txt
+   uv sync
    uvicorn app.main:app --reload
    ```
 
@@ -148,6 +148,7 @@ FastAPI는 자동으로 API 문서를 생성합니다:
 
 ## 기술 스택
 
-- **백엔드**: FastAPI, Python, OpenAI API, Hugging Face Transformers, PyTorch
+- **백엔드**: FastAPI, Python 3.10.17, OpenAI API, Hugging Face Transformers, PyTorch
+- **패키지 관리**: UV (ultrafast pip replacement)
 - **프론트엔드**: React, Material-UI
 - **인프라**: Docker, Docker Compose
