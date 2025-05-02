@@ -84,9 +84,17 @@ hancut_mk2/
 
    ```bash
    cd backend
-   python -m venv venv
-   source venv/bin/activate  # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
+   
+   # UV 설치 (처음 한 번만 필요)
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   export PATH="$HOME/.cargo/bin:$PATH"
+   
+   # 가상환경 생성 및 활성화
+   uv venv .venv
+   source .venv/bin/activate  # Windows: .venv\Scripts\activate
+   
+   # 의존성 설치 및 서버 실행
+   uv pip install -r requirements.txt
    uvicorn app.main:app --reload
    ```
 

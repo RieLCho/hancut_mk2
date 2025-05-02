@@ -19,13 +19,20 @@ echo "Docker가 설치되어 있지 않습니다. 로컬에서 실행합니다."
 # 백엔드 실행
 echo "백엔드 실행 중..."
 cd backend
-# Python 가상환경 확인
-if [ ! -d "venv" ]; then
-    echo "가상환경 생성 중..."
-    python3 -m venv venv
+# UV가 설치되어 있는지 확인
+if ! command -v uv &> /dev/null; then
+    echo "UV가 설치되어 있지 않습니다. 설치 중..."
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+    export PATH="$HOME/.cargo/bin:$PATH"
 fi
-source venv/bin/activate
-pip install -r requirements.txt
+
+# Python 가상환경 확인
+if [ ! -d ".venv" ]; then
+    echo "가상환경 생성 중..."
+    uv venv .venv
+fi
+source .venv/bin/activate
+uv pip install -r requirements.txt
 uvicorn app.main:app --reload &
 cd ..
 
@@ -33,4 +40,4 @@ cd ..
 echo "프론트엔드 실행 중..."
 cd frontend
 npm install
-npm start 
+npm start
