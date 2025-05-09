@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.models.schemas import ImageStyleRequest, ObjectDetectionRequest,  ImageGenerationResponse, ImageGenerationRequest
-from app.models.schemas import TextPromptRequest
+from app.models.request_schemas import ImageStyleRequest, ObjectDetectionRequest, TextPromptRequest
+from app.models.response_schemas import ImageGenerationResponse
 from app.routes import llm_routes, vision_routes
 from app.services.llm_service import llm_service
 from app.services.vision_service import vision_service

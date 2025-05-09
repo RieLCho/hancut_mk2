@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from app.models.schemas import TextPromptRequest, PromptResponse, ImageGenerationRequest, ImageGenerationResponse
+from app.models.request_schemas import TextPromptRequest, ImageGenerationRequest
+from app.models.response_schemas import PromptResponse, ImageGenerationResponse
 from app.services.llm_service import llm_service
 
 router = APIRouter()
