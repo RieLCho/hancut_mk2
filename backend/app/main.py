@@ -10,7 +10,7 @@ load_dotenv()
 from app.routes import llm_routes, vision_routes, hancut_routes
 from app.services.vision_service import vision_service
 
-from app.models.finetune_siglip import finetune_siglip
+# from app.models.finetune_siglip import finetune_siglip
 
 # FastAPI 앱 초기화
 app = FastAPI(
@@ -44,14 +44,14 @@ async def startup_event():
     print("서버 시작: 모델 초기화 중...")
     try:
         # SIGLIP 모델 초기화
-#         vision_service._load_siglip_model()
-#         print("SIGLIP 모델 초기화 완료")
+        vision_service._load_siglip_model()
+        print("SIGLIP 모델 초기화 완료")
         
         # Faster R-CNN 모델 초기화
 #         vision_service._load_rcnn_model()
 #         print("Faster R-CNN 모델 초기화 완료")
 
-        finetune_siglip()
+#         finetune_siglip()
         print("아임파인")
     except Exception as e:
         print(f"모델 초기화 중 오류 발생: {str(e)}")
