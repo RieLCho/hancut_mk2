@@ -5,6 +5,9 @@ import numpy as np
 from PIL import Image, UnidentifiedImageError
 import requests
 from transformers import SiglipProcessor, SiglipModel
+from transformers import AutoModelForImageClassification, AutoImageProcessor
+from safetensors import safe_open
+
 from torchvision.models.detection import fasterrcnn_resnet50_fpn_v2, FasterRCNN_ResNet50_FPN_V2_Weights
 from torchvision.transforms import functional as F
 import logging
@@ -47,18 +50,10 @@ class VisionService:
             "chair", "couch", "potted plant", "bed", "mirror", "dining table", "window", "desk",
             "toilet", "door", "tv", "laptop", "refrigerator", "book", "clock", "vase"
         ]
-        # 인테리어 스타일 후보
-#         self._style_candidates = [
-#             "modern", "minimalist", "scandinavian", "industrial", "rustic", "bohemian", "traditional",
-#             "contemporary", "mid-century modern", "art deco", "coastal", "farmhouse", "tropical",
-#             "eclectic", "zen", "vintage", "retro"
-#         ]
-        self._style_candidates = ["Industrial", "Luxe Glam", "Unique", "Mix & Match",
-          "Mid-century Modern", "Scandinavian", "Minimal", "Romantic", "Modern",
-           "Modern Natural", "Natural", "Vintage", "Antique", "Provence", "Art Deco",
-           "Retro", "Urban", "Country", "Rococo", "Victorian"]
-
-
+        self._style_candidates = ["Asian", "Coastal", "Contemporary", "Craftsman",
+         "Eclectic", "Farmhouse", "French Country", "Industrial", "Mediterranean",
+          "Mid-Century Modern", "Modern", "Rustic", "Scandinavian", "Shabby Chic",
+           "Southwestern", "Traditional", "Tropical", "Victorian"]
 
     def _load_siglip_model(self):
         """SIGLIP 모델 로드"""
@@ -66,17 +61,24 @@ class VisionService:
             print("SIGLIP 모델 로드 중...")
 
             try:
-                self._siglip_model = SiglipModel.from_pretrained(
-                    "google/siglip-base-patch16-224",
+                # 모델 로드
+                model_path = "./app/models/siglip"
+
+                self._siglip_model = AutoModelForImageClassification.from_pretrained(
+                    model_path,
+                    config=model_path + "/config.json",
                     cache_dir=self._cache_dir
                 )
-                self._siglip_processor = SiglipProcessor.from_pretrained(
-                    "google/siglip-base-patch16-224",
+
+                # 프로세서 로드
+                self._siglip_processor = AutoImageProcessor.from_pretrained(
+                    model_path,
                     cache_dir=self._cache_dir
                 )
+
                 print("SIGLIP 모델 로드 완료")
             except Exception as e:
-                logger.error(f"SIGLIP 모델 로드 중 오류 발생: {str(e)}")
+                print(f"SIGLIP 모델 로드 중 오류 발생: {str(e)}")
                 raise e
 
     def _load_rcnn_model(self):
@@ -172,6 +174,7 @@ class VisionService:
             style_texts = [f"This is a photo of {style} style interior." for style in self._style_candidates]
 
             # SIGLIP 입력 준비
+            logger.info("SIGLIP 모델에 입력 준비 중...")
             inputs = self._siglip_processor(
                 text=style_texts,
                 images=image,
@@ -180,20 +183,23 @@ class VisionService:
             )
 
             # 이미지와 텍스트 임베딩 계산
+            logger.info("모델 예측 시작...")
             with torch.no_grad():
                 outputs = self._siglip_model(**inputs)
-                logits_per_image = outputs.logits_per_image
-                probs = torch.sigmoid(logits_per_image)
+                logits = outputs.logits  # logits 속성 사용
+                probs = torch.sigmoid(logits)
 
             # 상위 3개 스타일 추출
             top_probs, top_indices = torch.topk(probs[0], k=3)
             top_styles = [self._style_candidates[idx.item()] for idx in top_indices]
+            logger.info(f"상위 3개 스타일: {top_styles}")
 
             return top_styles
 
         except Exception as e:
             logger.error(f"스타일 추출 오류: {str(e)}")
             return ["modern"]  # 오류 시 기본 스타일 반환
+
 
     async def detect_objects(self, image_url: str) -> list:
         """이미지에서 인테리어 관련 객체 탐지"""
