@@ -7,10 +7,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 라우트 임포트
-from app.routes import llm_routes, vision_routes
+from app.routes import llm_routes, vision_routes, hancut_routes
 from app.services.vision_service import vision_service
-
-from app.models.finetune_siglip import finetune_siglip
 
 # FastAPI 앱 초기화
 app = FastAPI(
@@ -31,6 +29,7 @@ app.add_middleware(
 # 라우트 등록
 app.include_router(llm_routes.router, prefix="/api/llm", tags=["LLM"])
 app.include_router(vision_routes.router, prefix="/api/vision", tags=["Vision"])
+app.include_router(hancut_routes.router, prefix="/api/hancut", tags=["Hancut"])
 
 # 루트 라우트
 @app.get("/")

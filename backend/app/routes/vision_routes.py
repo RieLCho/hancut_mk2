@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from fastapi.responses import JSONResponse
-from app.models.schemas import ImageStyleRequest, StyleAnalysisResponse, ObjectDetectionRequest, ObjectDetectionResponse, DetectedObject
+from app.models.request_schemas import ImageStyleRequest, ObjectDetectionRequest
+from app.models.response_schemas import StyleAnalysisResponse, ObjectDetectionResponse, DetectedObject
 from app.services.vision_service import vision_service
 from typing import List
 
