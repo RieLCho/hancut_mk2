@@ -10,18 +10,19 @@ import Home from "./pages/Home.tsx";
 import TextPrompt from "./pages/TextPrompt.tsx";
 import ImageStyle from "./pages/ImageStyle.tsx";
 import ObjectDetection from "./pages/ObjectDetection.tsx";
+import Steps from "./pages/Steps.tsx";
 
 // 테마 설정
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2e7d32",
+      main: "#000000",
     },
     secondary: {
       main: "#f50057",
     },
     background: {
-      default: "#f5f5f5",
+      default: "#ffffff",
     },
   },
   typography: {
@@ -52,6 +53,7 @@ const App: React.FC = () => {
           <Route path="/text-prompt" element={<TextPrompt />} />
           <Route path="/image-style" element={<ImageStyle />} />
           <Route path="/object-detection" element={<ObjectDetection />} />
+          <Route path="/step" element={<Steps />} />
         </Routes>
       </div>
       <Footer />

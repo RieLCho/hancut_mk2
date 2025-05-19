@@ -1,0 +1,20 @@
+
+@font-face {
+    font-family: "Hanna";
+    font-weight: normal;
+    src: url("../font/BMHANNAPro.ttf") format("truetype");
+}
+@font-face {
+    font-family: "SUIT";
+    font-weight: normal;
+    src: url("../font/SUIT-Variable.ttf") format("truetype");
+}
+:root {
+    --global_width_size: 1320px;
+    --content_width_size: calc(var(--global_width_size) - 610px - 30px - 30px);
+    background: #F5F5F5;
+}
+
+::selection{
+    background-color: #e47171;
+}

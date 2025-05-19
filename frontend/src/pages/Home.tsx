@@ -14,6 +14,11 @@ import {
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
 import SearchIcon from "@mui/icons-material/Search";
+import img1 from "../image/image1.png";
+import img2 from "../image/image2.png";
+import img3 from "../image/image3.png";
+import img4 from "../image/image4.png";
+
 
 interface Feature {
   title: string;
@@ -49,77 +54,120 @@ const features: Feature[] = [
 const Home: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ my: 4 }}>
-      <Paper elevation={3} sx={{ p: 4, mb: 4, borderRadius: 2 }}>
-        <Typography variant="h3" component="h1" gutterBottom textAlign="center">
-          인테리어 프롬프트 생성 시스템
-        </Typography>
+      <Paper  elevation={0} sx={{p: 27, pb:4, mb: 4}}>
         <Typography
-          variant="h5"
-          color="text.secondary"
-          paragraph
-          textAlign="center"
+            variant="h7"
+            color="text.primary"
+            paragraph
+            textAlign="center"
         >
-          텍스트와 이미지를 활용하여 인테리어 디자인 프롬프트를 손쉽게
-          생성하세요
+          HANCUT
+        {/*  텍스트와 이미지를 활용하여 인테리어 디자인 프롬프트를 손쉽게
+          생성하세요*/}
+        </Typography>
+        {/*<Typography variant="h3" component="h1" gutterBottom textAlign="center">*/}
+        {/*  인테리어 이미지 생성하러 가기*/}
+        {/*</Typography>*/}
+        <Typography
+            variant="h1"
+            component={RouterLink}
+            to="/step"
+            gutterBottom
+            textAlign="center"
+            sx={{
+              display: 'block',
+              mx: 'auto',
+              textDecoration: 'none',
+              color: 'inherit',
+              cursor: 'pointer',
+              '&:hover': {
+                textDecoration: 'underline',
+              },
+            }}
+        >
+          인테리어 이미지 생성하러 가기
+        </Typography>
+
+        <Typography
+            variant="h7"
+            color="text.primary"
+            paragraph
+            textAlign="center"
+        >
+          SIGLIP l GPT 4-mini l Dalle 3
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            component={RouterLink}
-            to="/text-prompt"
-          >
-            시작하기
-          </Button>
+          {/*<Button*/}
+          {/*  variant="contained"*/}
+          {/*  color="primary"*/}
+          {/*  size="large"*/}
+          {/*  component={RouterLink}*/}
+          {/*  to="/text-prompt"*/}
+          {/*>*/}
+          {/*  시작하기*/}
+          {/*</Button>*/}
         </Box>
       </Paper>
 
-      <Box sx={{ mb: 5 }}>
-        <Typography
-          variant="h4"
-          component="h2"
-          gutterBottom
-          sx={{ mb: 3 }}
-          textAlign="center"
-        >
-          주요 기능
-        </Typography>
-        <Grid container spacing={4}>
-          {features.map((feature, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Box sx={{ pt: 3, display: "flex", justifyContent: "center" }}>
-                  {feature.icon}
-                </Box>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    {feature.title}
-                  </Typography>
-                  <Typography>{feature.description}</Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: "center", pb: 2 }}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    component={RouterLink}
-                    to={feature.link}
-                  >
-                    사용해보기
-                  </Button>
-                </CardActions>
+      {/*<Box sx={{ mb: 5 }}>*/}
+      {/*  <Typography*/}
+      {/*    variant="h4"*/}
+      {/*    component="h2"*/}
+      {/*    gutterBottom*/}
+      {/*    sx={{ mb: 3 }}*/}
+      {/*    textAlign="center"*/}
+      {/*  >*/}
+      {/*    주요 기능*/}
+      {/*  </Typography>*/}
+      {/*  <Grid container spacing={4}>*/}
+      {/*    {features.map((feature, index) => (*/}
+      {/*      <Grid item xs={12} md={4} key={index}>*/}
+      {/*        <Card*/}
+      {/*          sx={{*/}
+      {/*            height: "100%",*/}
+      {/*            display: "flex",*/}
+      {/*            flexDirection: "column",*/}
+      {/*          }}*/}
+      {/*        >*/}
+      {/*          <Box sx={{ pt: 3, display: "flex", justifyContent: "center" }}>*/}
+      {/*            {feature.icon}*/}
+      {/*          </Box>*/}
+      {/*          <CardContent sx={{ flexGrow: 1 }}>*/}
+      {/*            <Typography gutterBottom variant="h5" component="h3">*/}
+      {/*              {feature.title}*/}
+      {/*            </Typography>*/}
+      {/*            <Typography>{feature.description}</Typography>*/}
+      {/*          </CardContent>*/}
+      {/*          <CardActions sx={{ justifyContent: "center", pb: 2 }}>*/}
+      {/*            <Button*/}
+      {/*              variant="outlined"*/}
+      {/*              color="primary"*/}
+      {/*              component={RouterLink}*/}
+      {/*              to={feature.link}*/}
+      {/*            >*/}
+      {/*              사용해보기*/}
+      {/*            </Button>*/}
+      {/*          </CardActions>*/}
+      {/*        </Card>*/}
+      {/*      </Grid>*/}
+      {/*    ))}*/}
+      {/*  </Grid>*/}
+      {/*</Box>*/}
+      <Grid container spacing={4} sx={{ mb: 15 }}>
+        {[img1, img2, img3, img4].map((imgSrc, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Card sx={{ overflow: "hidden", boxShadow: 3 }}>
+                <Box
+                    component="img"
+                    src={imgSrc}
+                    alt={`인테리어 샘플 ${index + 1}`}
+                    sx={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
+                />
               </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
 
+            </Grid>
+        ))}
+      </Grid>
       <Box
         sx={{
           my: 5,
