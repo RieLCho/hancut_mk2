@@ -12,7 +12,7 @@ import {
   Chip,
   TextField,
   Grid,
-  Divider,
+  Divider, CardMedia,
 } from "@mui/material";
 import { VisionService } from "../services/api";
 
@@ -177,3 +177,10 @@ const ImageStyle: React.FC = () => {
 };
 
 export default ImageStyle;
+
+
+
+
+
+
+

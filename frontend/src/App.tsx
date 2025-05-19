@@ -16,13 +16,13 @@ import OneStep from "./pages/OneStep.tsx";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2e7d32",
+      main: "#000000",
     },
     secondary: {
       main: "#f50057",
     },
     background: {
-      default: "#f5f5f5",
+      default: "#ffffff",
     },
   },
   typography: {
