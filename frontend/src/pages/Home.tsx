@@ -94,7 +94,7 @@ const Home: React.FC = () => {
             paragraph
             textAlign="center"
         >
-          SIGLIP l GPT 4-mini l Dalle 3
+          SIGLIP l GPT-4.1 nano l Dalle 3
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
           {/*<Button*/}
