@@ -78,48 +78,48 @@ const Header: React.FC = () => {
               >
                 <MenuIcon />
               </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
-                {menuItems.map((item) => (
-                  <MenuItem
-                    key={item.path}
-                    component={RouterLink}
-                    to={item.path}
-                    onClick={handleClose}
-                  >
-                    <Box sx={{ mr: 1 }}>{item.icon}</Box>
-                    {item.label}
-                  </MenuItem>
-                ))}
-              </Menu>
+              {/*<Menu*/}
+              {/*  id="menu-appbar"*/}
+              {/*  anchorEl={anchorEl}*/}
+              {/*  anchorOrigin={{*/}
+              {/*    vertical: "top",*/}
+              {/*    horizontal: "right",*/}
+              {/*  }}*/}
+              {/*  keepMounted*/}
+              {/*  transformOrigin={{*/}
+              {/*    vertical: "top",*/}
+              {/*    horizontal: "right",*/}
+              {/*  }}*/}
+              {/*  open={Boolean(anchorEl)}*/}
+              {/*  onClose={handleClose}*/}
+              {/*>*/}
+              {/*  {menuItems.map((item) => (*/}
+              {/*    <MenuItem*/}
+              {/*      key={item.path}*/}
+              {/*      component={RouterLink}*/}
+              {/*      to={item.path}*/}
+              {/*      onClick={handleClose}*/}
+              {/*    >*/}
+              {/*      <Box sx={{ mr: 1 }}>{item.icon}</Box>*/}
+              {/*      {item.label}*/}
+              {/*    </MenuItem>*/}
+              {/*  ))}*/}
+              {/*</Menu>*/}
             </>
           ) : (
             <Box sx={{ display: "flex" }}>
-              {menuItems.map((item) => (
-                <Button
-                  key={item.path}
-                  color="inherit"
-                  component={RouterLink}
-                  to={item.path}
-                  startIcon={item.icon}
-                  sx={{ ml: 2 }}
-                >
-                  {item.label}
-                </Button>
-              ))}
+              {/*{menuItems.map((item) => (*/}
+              {/*  <Button*/}
+              {/*    key={item.path}*/}
+              {/*    color="inherit"*/}
+              {/*    component={RouterLink}*/}
+              {/*    to={item.path}*/}
+              {/*    startIcon={item.icon}*/}
+              {/*    sx={{ ml: 2 }}*/}
+              {/*  >*/}
+              {/*    {item.label}*/}
+              {/*  </Button>*/}
+              {/*))}*/}
             </Box>
           )}
         </Toolbar>

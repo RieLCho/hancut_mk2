@@ -41,4 +41,6 @@ docker-compose.override.yml
 # 기타
 *.log
 *.tmp
-*.temp 
+*.temp
+
+/backend/dataset
