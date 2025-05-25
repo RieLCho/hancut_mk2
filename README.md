@@ -65,6 +65,10 @@ hancut_mk2/
    # OPENAI_API_KEY 값을 수정하세요
    ```
 
+### 모델 파일 추가
+
+backend/app/models/siglip/model.safetensors 파일을 수동으로 추가해야함.
+
 ### 실행 방법 1: 시작 스크립트 사용 (권장)
 
 1. 제공된 스크립트를 사용하여 백엔드와 프론트엔드를 한 번에 실행합니다:
@@ -79,15 +83,15 @@ hancut_mk2/
 
    ```bash
    cd backend
-   
+
    # UV 설치 (처음 한 번만 필요)
    curl -LsSf https://astral.sh/uv/install.sh | sh
    export PATH="$HOME/.cargo/bin:$PATH"
-   
+
    # 가상환경 생성 및 활성화
    uv venv .venv
    source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   
+
    # 의존성 설치 및 서버 실행
    uv sync
    uvicorn app.main:app --reload
