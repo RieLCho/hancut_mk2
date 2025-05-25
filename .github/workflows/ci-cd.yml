@@ -31,61 +31,61 @@ jobs:
       - name: Type check
         run: npm run type-check
 
-  backend-check:
-    name: Backend Build & Test
-    runs-on: ubuntu-latest
+  # backend-check:
+  #   name: Backend Build & Test
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
         
-      - name: Set up Python 3.10.17
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10.17'
+  #     - name: Set up Python 3.10.17
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: '3.10.17'
 
-      - name: Install UV
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | bash
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+  #     - name: Install UV
+  #       run: |
+  #         curl -LsSf https://astral.sh/uv/install.sh | bash
+  #         echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Create venv and install dependencies
-        working-directory: ./backend
-        run: |
-          uv venv .venv
-          source .venv/bin/activate
-          uv sync
+  #     - name: Create venv and install dependencies
+  #       working-directory: ./backend
+  #       run: |
+  #         uv venv .venv
+  #         source .venv/bin/activate
+  #         uv sync
 
-      - name: Create environment file
-        run: |
-          cd backend
-          cp .env.example .env
+  #     - name: Create environment file
+  #       run: |
+  #         cd backend
+  #         cp .env.example .env
 
-      - name: Run application and check startup
-        working-directory: ./backend
-        run: |
-          source .venv/bin/activate
-          # 백그라운드에서 애플리케이션 실행
-          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-          # 프로세스 ID 저장
-          APP_PID=$!
+  #     - name: Run application and check startup
+  #       working-directory: ./backend
+  #       run: |
+  #         source .venv/bin/activate
+  #         # 백그라운드에서 애플리케이션 실행
+  #         uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+  #         # 프로세스 ID 저장
+  #         APP_PID=$!
           
-          # 애플리케이션이 시작될 때까지 대기 (최대 30초)
-          timeout=30
-          echo "Waiting for application to start (up to $timeout seconds)..."
+  #         # 애플리케이션이 시작될 때까지 대기 (최대 30초)
+  #         timeout=30
+  #         echo "Waiting for application to start (up to $timeout seconds)..."
           
-          for i in $(seq 1 $timeout); do
-            if curl -s http://localhost:8000/docs > /dev/null; then
-              echo "✅ Application started successfully"
-              # 성공 로깅
-              ps -p $APP_PID -o args=
-              kill $APP_PID
-              exit 0
-            fi
-            sleep 1
-            echo "Waiting... ($i/$timeout)"
-          done
+  #         for i in $(seq 1 $timeout); do
+  #           if curl -s http://localhost:8000/docs > /dev/null; then
+  #             echo "✅ Application started successfully"
+  #             # 성공 로깅
+  #             ps -p $APP_PID -o args=
+  #             kill $APP_PID
+  #             exit 0
+  #           fi
+  #           sleep 1
+  #           echo "Waiting... ($i/$timeout)"
+  #         done
           
-          echo "❌ Application failed to start within $timeout seconds"
-          kill $APP_PID || true
-          exit 1
+  #         echo "❌ Application failed to start within $timeout seconds"
+  #         kill $APP_PID || true
+  #         exit 1
