@@ -38,12 +38,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        
+      - name: Set up Python 3.10.17
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10.17'
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Install UV
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | bash
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Build Docker image
-        run: docker build -t hancut-backend:test ./backend
+      - name: Create venv and install dependencies
+        working-directory: ./backend
+        run: |
+          uv venv .venv
+          source .venv/bin/activate
+          uv sync
 
       - name: Create environment file
         run: |
@@ -51,26 +62,30 @@ jobs:
           cp .env.example .env
 
       - name: Run application and check startup
+        working-directory: ./backend
         run: |
-          docker run -d --name backend-test -p 8000:8000 hancut-backend:test
+          source .venv/bin/activate
+          # 백그라운드에서 애플리케이션 실행
+          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          # 프로세스 ID 저장
+          APP_PID=$!
+          
           # 애플리케이션이 시작될 때까지 대기 (최대 30초)
           timeout=30
           echo "Waiting for application to start (up to $timeout seconds)..."
-
+          
           for i in $(seq 1 $timeout); do
-            if docker logs backend-test 2>&1 | grep -q "Application startup complete"; then
+            if curl -s http://localhost:8000/docs > /dev/null; then
               echo "✅ Application started successfully"
-              docker logs backend-test
-              exit 0
-            elif docker logs backend-test 2>&1 | grep -q "Uvicorn running on"; then
-              echo "✅ Application started successfully"
-              docker logs backend-test
+              # 성공 로깅
+              ps -p $APP_PID -o args=
+              kill $APP_PID
               exit 0
             fi
             sleep 1
             echo "Waiting... ($i/$timeout)"
           done
-
+          
           echo "❌ Application failed to start within $timeout seconds"
-          docker logs backend-test
+          kill $APP_PID || true
           exit 1
