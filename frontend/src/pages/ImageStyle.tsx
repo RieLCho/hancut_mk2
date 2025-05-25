@@ -12,7 +12,7 @@ import {
   Chip,
   TextField,
   Grid,
-  Divider, CardMedia,
+  Divider,
 } from "@mui/material";
 import { VisionService } from "../services/api";
 
