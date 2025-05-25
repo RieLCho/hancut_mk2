@@ -62,15 +62,14 @@ const Home: React.FC = () => {
           텍스트와 이미지를 활용하여 인테리어 디자인 프롬프트를 손쉽게
           생성하세요
         </Typography>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <Button
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>            <Button
             variant="contained"
             color="primary"
             size="large"
             component={RouterLink}
-            to="/text-prompt"
+            to="/onestep"
           >
-            시작하기
+            올인원 시작하기
           </Button>
         </Box>
       </Paper>

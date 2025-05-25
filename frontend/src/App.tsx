@@ -10,6 +10,7 @@ import Home from "./pages/Home.tsx";
 import TextPrompt from "./pages/TextPrompt.tsx";
 import ImageStyle from "./pages/ImageStyle.tsx";
 import ObjectDetection from "./pages/ObjectDetection.tsx";
+import OneStep from "./pages/OneStep.tsx";
 
 // 테마 설정
 const theme = createTheme({
@@ -52,6 +53,7 @@ const App: React.FC = () => {
           <Route path="/text-prompt" element={<TextPrompt />} />
           <Route path="/image-style" element={<ImageStyle />} />
           <Route path="/object-detection" element={<ObjectDetection />} />
+          <Route path="/onestep" element={<OneStep />} />
         </Routes>
       </div>
       <Footer />
