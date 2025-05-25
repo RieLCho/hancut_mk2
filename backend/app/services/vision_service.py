@@ -4,7 +4,6 @@ import torch
 import numpy as np
 from PIL import Image, UnidentifiedImageError
 import requests
-from transformers import SiglipProcessor, SiglipModel
 from transformers import AutoModelForImageClassification, AutoImageProcessor
 from safetensors import safe_open
 

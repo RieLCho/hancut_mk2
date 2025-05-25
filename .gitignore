@@ -13,6 +13,7 @@ ENV/
 *.egg-info/
 .installed.cfg
 *.egg
+model.safetensors
 
 # 프론트엔드
 node_modules/
