@@ -177,3 +177,10 @@ const ImageStyle: React.FC = () => {
 };
 
 export default ImageStyle;
+
+
+
+
+
+
+

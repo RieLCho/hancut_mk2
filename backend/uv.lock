@@ -158,15 +158,6 @@ wheels = [
 ]
 
 [[package]]
-name = "distro"
-version = "1.9.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed", size = 60722 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2", size = 20277 },
-]
-
-[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 source = { registry = "https://pypi.org/simple" }
@@ -272,7 +263,7 @@ requires-dist = [
     { name = "fastapi", specifier = "==0.110.0" },
     { name = "httpx", specifier = "==0.27.0" },
     { name = "numpy", specifier = "==1.26.4" },
-    { name = "openai", specifier = "==1.25.0" },
+    { name = "openai", specifier = "==0.28.0" },
     { name = "pillow", specifier = "==10.3.0" },
     { name = "protobuf", specifier = ">=3.20.0" },
     { name = "pydantic", specifier = "==2.7.1" },
@@ -543,20 +534,16 @@ wheels = [
 
 [[package]]
 name = "openai"
-version = "1.25.0"
+version = "0.28.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "anyio" },
-    { name = "distro" },
-    { name = "httpx" },
-    { name = "pydantic" },
-    { name = "sniffio" },
+    { name = "aiohttp" },
+    { name = "requests" },
     { name = "tqdm" },
-    { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/64/69/7babc224019e4cfc0b6151f8170cf51ead088ba2c3b4f65dd731a794aa16/openai-1.25.0.tar.gz", hash = "sha256:22c35b26b8281cd2759b1a4c05ac99e2f2b26a9df71f90a0b4ddb75aa27adc81", size = 174543 }
+sdist = { url = "https://files.pythonhosted.org/packages/5e/a8/f8d00a76f3991ff250b6584434ca24c2d275c6f3e97592b44f4ca124c47a/openai-0.28.0.tar.gz", hash = "sha256:417b78c4c2864ba696aedaf1ccff77be1f04a581ab1739f0a56e0aae19e5a794", size = 61518 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/32/54/e50ba99d35dd951f5ca94c54cb7fe2f492c8a3a87e5979e21194cccd1977/openai-1.25.0-py3-none-any.whl", hash = "sha256:d0cfdf6afb31a5dabf3b95966cb31f3c757a0edaf3228715409cb404b9933de0", size = 312920 },
+    { url = "https://files.pythonhosted.org/packages/ae/59/911d6e5f1d7514d79c527067643376cddcf4cb8d1728e599b3b03ab51c69/openai-0.28.0-py3-none-any.whl", hash = "sha256:d207ece78469be5648eb87b825753282225155a29d0eec6e02013ddbf8c31c0c", size = 76548 },
 ]
 
 [[package]]

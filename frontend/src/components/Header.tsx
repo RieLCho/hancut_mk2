@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import HomeIcon from "@mui/icons-material/Home";
+import BoltIcon from "@mui/icons-material/Bolt";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import ImageIcon from "@mui/icons-material/Image";
 import SearchIcon from "@mui/icons-material/Search";
@@ -39,7 +39,7 @@ const Header: React.FC = () => {
   };
 
   const menuItems: MenuItem[] = [
-    { label: "홈", path: "/", icon: <HomeIcon /> },
+    { label: "All-in-One", path: "/onestep", icon: <BoltIcon /> },
     {
       label: "텍스트 프롬프트",
       path: "/text-prompt",
