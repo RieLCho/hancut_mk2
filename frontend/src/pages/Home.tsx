@@ -31,14 +31,14 @@ const features: Feature[] = [
   {
     title: "텍스트 기반 프롬프트 생성",
     description:
-      "GPT-4를 활용하여 텍스트 입력으로부터 상세한 인테리어 디자인 프롬프트를 생성합니다.",
+      "GPT-4.1 nano를 활용하여 텍스트 입력으로부터 상세한 인테리어 디자인 프롬프트를 생성합니다.",
     icon: <TextFieldsIcon sx={{ fontSize: 50, color: "primary.main" }} />,
     link: "/text-prompt",
   },
   {
     title: "이미지 기반 스타일 추출",
     description:
-      "CLIP 모델을 사용하여 이미지에서 인테리어 스타일을 추출하고 분석합니다.",
+      "SIGLIP 모델을 사용하여 이미지에서 인테리어 스타일을 추출하고 분석합니다.",
     icon: <ImageIcon sx={{ fontSize: 50, color: "primary.main" }} />,
     link: "/image-style",
   },
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
             paragraph
             textAlign="center"
         >
-          SIGLIP l GPT 4-mini l Dalle 3
+          SIGLIP l GPT-4.1 nano l DALL-E 3
         </Typography>
         <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
         </Box>
@@ -124,7 +124,7 @@ const Home: React.FC = () => {
           HanCut은 인테리어 디자인에 관심이 있는 사용자들을 위한 프롬프트 생성
           도구입니다. 1. 텍스트 기반 프롬프트 생성, 2. 이미지 기반 스타일 추출,
           3. 객체 탐지 기능을 통해 사용자는 손쉽게 인테리어 디자인 아이디어를
-          생성하고, 분석할 수 있습니다. 이 도구는 GPT-4.1 mini, siglip, Faster R-CNN과 같은
+          생성하고, 분석할 수 있습니다. 이 도구는 GPT-4.1 nano, siglip, Faster R-CNN과 같은
           State of the art 수준의 AI 기술을 활용하여 사용자에게 최적의 인테리어 디자인 솔루션을
           제공합니다.
         </Typography>
