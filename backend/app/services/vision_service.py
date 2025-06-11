@@ -61,7 +61,8 @@ class VisionService:
 
             try:
                 # 모델 로드
-                model_path = "./app/models/siglip"
+                model_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "models", "siglip"))
+
 
                 self._siglip_model = AutoModelForImageClassification.from_pretrained(
                     model_path,
