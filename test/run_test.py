@@ -27,10 +27,10 @@ async def test():
     # 테스트 시작
     try : 
         for idx, item in enumerate(results, start=1):
-            input_styles = set(item["InputStyles"])
-            output_styles = set(item["OutputStyles"])
-            input_objects = set(item["InputObjects"])
-            output_objects = set(item["OutputObjects"])
+            input_styles = set(s.lower() for s in item["InputStyles"])
+            output_styles = set(s.lower() for s in item["OutputStyles"])
+            input_objects = set(o.lower() for o in item["InputObjects"])
+            output_objects = set(o.lower() for o in item["OutputObjects"])
 
             style_intersection = input_styles & output_styles
             object_intersection = input_objects & output_objects
