@@ -109,6 +109,29 @@ backend/app/models/siglip/model.safetensors 파일을 수동으로 추가해야�
 
 ## 최근 업데이트
 
+### 성능 측정 실행 방법
+
+1. 데이터 준비:
+   ```bash
+   cd test/data
+   ```
+   text_data.txt에 사용자 요구사항 프롬프트를 한 줄에 하나씩 입력합니다.
+   img_data.txt에 프롬프트에 참조할 이미지 url을 한 줄에 하나씩 입력합니다.
+
+2. 테스트 실행:
+   ```bash
+   cd ../..
+   source test.sh
+   ```
+
+3. 결과 확인:
+   ```bash
+   cd test/result
+   ```
+   style_result.txt를 통해 케이스별 스타일 정확도와 전체 평균을 확인합니다.
+   object_result.txt를 통해 케이스별 인테리어 객체 정확도와 전체 평균을 확인합니다.
+
+
 ## API 문서
 
 FastAPI는 자동으로 API 문서를 생성합니다:

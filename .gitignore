@@ -26,6 +26,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# 테스트
+test_db.json
+style_result.txt
+object_result.txt
+
 # IDE
 .idea/
 .vscode/
